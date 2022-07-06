@@ -1,0 +1,1 @@
+from docbr.core._docclass import Doc
