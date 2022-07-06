@@ -3,7 +3,6 @@
 DocBR é um pacote Python para extração e validação de documentos brasileiros em escala, projetado para APIs de alta performance e pipelines de engenharia de dados que necessitam processar grandes volumes de dados. Seu core é desenvolvido em Numpy e possui integração nativa com Pandas / Numpy para facilitar a sua utilização com outros frameworks.
 
 ## Instalação
-_____________
 
 Você pode instalar este pacote através do PyPI:
 
@@ -12,7 +11,6 @@ pip install docbr
 ```
 
 ## Análise de Documentos
-________________________
 
 Com DocBr, você pode tratar com os seguintes documentos:
 
@@ -30,12 +28,9 @@ Com DocBr, você pode tratar com os seguintes documentos:
 | Contato             | E-mail                                    | email   | RegExr              |
 
 ## Métodos
-___________
-
 Existem 3 métodos que você pode utilizar em seus documentos dentro do DocBR: parse, validate e attributes.
 
 ### parse
-___________
 
 Recebe n documentos nos formatos int, str, list, numpy.array ou pandas.series. Estes objetos são então convertidos para um numpy.array de strings e os documentos são **extraídos** de acordo com o tipo do documento declarado.
 
@@ -72,7 +67,6 @@ array(['12345678000158', '12345678000298', '12345678000300'])
 ```
 
 ### validate
-____________
 
 Recebe n documentos nos formatos int, str, list, numpy.array ou pandas.series. Estes objetos são então convertidos para um numpy.array de strings e os documentos são **validados** de acordo com o tipo do documento declarado.
 
@@ -96,7 +90,6 @@ array([False, False, False])
 ```
 
 ### attributes
-______________
 
 Recebe um documento nos formatos int, str, list, numpy.array ou pandas.series. Estes objetos são então convertidos para um numpy.array de strings e o documento é então os atributos do documento são extraídos, se este tiver atributos para extração.
 
@@ -142,7 +135,6 @@ dbr.list_attributes()
 ```
 
 ## Uso com Pandas
-_________________
 
 Para utilizar o DocBR com o Pandas, basta passar passar uma séries (coluna) para o método desejado e declarar o tipo de documento.
 
