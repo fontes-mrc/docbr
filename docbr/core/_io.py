@@ -11,27 +11,6 @@ from typing import (
     )
 
 def io_get(obj) -> Tuple[Callable, type]:
-    """
-    Identify the type of a given object and return the function to convert it into a numpy array and the type of object that will be returned to the user.
-
-    Parameters
-    ----------
-    obj : object
-        Object to identify.
-    
-    Returns
-    -------
-    Tuple[Callable, type]
-        Tuple of function to convert the object into a numpy array and the type of object that will be returned to the user.
-    
-    Raises
-    ------
-    TypeError
-        If the object is not a supported type.
-    ValueError
-        If the object is an iterable of not supported types.
-
-    """
     _iotypes={
         "<class 'int'>":                        (lambda x: array([str(x)])          , str    ),
         "<class 'float'>":                      (lambda x: array([str(x)])          , str    ),
@@ -67,24 +46,9 @@ def io_get(obj) -> Tuple[Callable, type]:
         )
 
 def io_input_narray(obj, i_func: Callable) -> ndarray:
-    """
-    Aplies a function to an object in order to return a numpy array of strings.
-    
-    See Also
-    --------
-    io_get : Identify the type of an object and return the function to convert it into a numpy array and the type of object that will be returned to the user.
-    """
     return i_func(obj)
 
-
 def io_output_narray(obj: ndarray, o_type: type) -> Union[str, ndarray]:
-    """
-    Convert a numpy array of strings into a given type.
-
-    See Also
-    --------
-    io_get : Identify the type of an object and return the function to convert it into a numpy array and the type of object that will be returned to the user.
-    """
     if o_type == str:
         return obj[0]
     if o_type == ndarray:

@@ -14,7 +14,6 @@ class TestCoreIO(unittest.TestCase):
             ('abc'                       ,array(['abc'])),
             (array([0])                  ,array(['0'])),
             (['abc',123]                 ,array(['abc','123'])),
-            #(Series({'col':[0,0,'abc']}) ,array(['0','0','abc'])),
             #(Series([0,0,'abc'])         ,array(['0','0','abc'])),
         ]
 
@@ -24,6 +23,7 @@ class TestCoreIO(unittest.TestCase):
             ([None,None] , ValueError),
             (True        , TypeError),
             ([{1:1},0]   , ValueError),
+            #(Series({'col':[0,0,'abc']}) , ValueError),
             #([Series([0,0,'abc']),Series([0,0,'abc'])], ValueError),
             #(DataFrame([0,0,'abc']), TypeError),
         ]

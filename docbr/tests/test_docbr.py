@@ -1,7 +1,9 @@
 import unittest
-from docbr import parse, validate, attributes
+from docbr import parse, validate, get_attribute
+from docbr import doctypes as d
+from docbr import attributes as attr
 
-class TestDocBR(unittest.TestCase):
+class TestDocbr(unittest.TestCase):
     def test_parse(self):
         cases = [
             (('155-59.A539000152','cnpj', True),'15.559.539/0001-52'),
@@ -31,8 +33,17 @@ class TestDocBR(unittest.TestCase):
             (('abc@abc.com.br','email', False),'abc@abc.com.br'),
         ]
 
+        raises = [
+            (('any','ccard', True), ValueError),
+        ]
+
         for test, expected in cases:
             self.assertEqual(parse(*test), expected)
+
+        for test, expected in raises:
+            with self.assertRaises(expected):
+                get_attribute(*test)
+
     
     def test_validate(self):
         cases = [
@@ -63,28 +74,22 @@ class TestDocBR(unittest.TestCase):
 
     def test_attributes(self):
         cases = [
-            (('15559539000152','cnpj', '*'), {'raíz':'15559539','matriz/filial':'matriz'}),
-            (('15559539000152','cnpj', 'raíz'), '15559539'),
-            (('82683688377','cpf', '*'), {'região':'CE/MA/PI'}),
-            (('82683688377','cpf', 'região'), 'CE/MA/PI'),
-            (('389441060167','te', 'estado'), 'SP'),
-            (('24298401552012167386797522780794','cert', 'ano'), '2012'),
-            (('ABC1234','placa', '*'), {'padrão':'brasil'}),
-            (('11987659876','tfone', '*'), {'ddd':'11','estado':'SP','tipo':'celular'}),
-            (('abc@abc.com.br','email', 'domínio'), 'abc.com.br'),
+            (('15559539000152', d.CNPJ, attr.CNPJ_RAIZ, True), '15559539'),
+            (('82683688377', d.CPF, attr.CPF_REGIAO), 'CE/MA/PI'),
+            (('389441060167',d.T_ELEITOR, attr.T_ELEITOR_UF), 'SP'),
+            (('24298401552012167386797522780794',d.CERTIDAO, attr.CERTIDAO_ANO), '2012'),
+            (('abc@abc.com.br', d.EMAIL, attr.EMAIL_DOMINIO), 'abc.com.br'),
+            (('11987654321', d.TELEFONE, attr.TELEFONE_UF), 'SP'),
         ]
 
         raises = [
-            (('15559539000152','cnpj', 'estado'),  KeyError),
-            (('84223533040','cnh'    , '*')     ,ValueError),
-            (('75145500065','pis'    , '*')     ,ValueError),
-            (('31186126948','rnvam'  , '*')     ,ValueError),
-            (('31186126948','abc'    , '*')     ,ValueError),
+            (('15559539000152',d.CNPJ, 'estado'),  ValueError),
+            (('84223533040',d.PLACA, '*'), ValueError),
         ]
 
         for test, expected in cases:
-            self.assertEqual(attributes(*test), expected)
+            self.assertEqual(get_attribute(*test), expected)
         
         for test, expected in raises:
             with self.assertRaises(expected):
-                attributes(*test)
+                get_attribute(*test)

@@ -37,9 +37,9 @@ Recebe n documentos nos formatos int, str, list, numpy.array ou pandas.series. E
 Retorna um numpy.array de strings com os documentos extraídos.
 
 Argumentos:
- - doc: n documentos nos formatos int, str, list, numpy.array ou pandas.series
- - doctype: tipo do documento, conforme lista acima
- - mask: boolean para definir se o documento deve ser mascarado ou não
+ - doclist: n documentos nos formatos int, str, list, numpy.array ou pandas.series.
+ - doctype: tipo do documento, conforme lista acima.
+ - mask: boolean para definir se o documento deve ser mascarado ou não.
 
 *Input:*
 ```python
@@ -56,9 +56,10 @@ array(['12.345.678/0001-00', '12.345.678/0002-00', '12.345.678/0003-00'])
 *Input:*
 ```python
 import docbr as dbr
+from docbr import doctypes as d
 
 docs = ['12 345 678 0001 58', '12345678000298..', '12345678000300']
-dbr.parse(docs, doctype='cnpj', mask=False)
+dbr.parse(docs, doctype=d.CNPJ, mask=False)
 ```
 
 *Output:*
@@ -73,8 +74,8 @@ Recebe n documentos nos formatos int, str, list, numpy.array ou pandas.series. E
 Retorna um numpy.array de booleans com os resultados das validações.
 
 Argumentos:
- - doc: n documentos nos formatos int, str, list, numpy.array ou pandas.series
- - doctype: tipo do documento, conforme lista acima
+ - doclist: n documentos nos formatos int, str, list, numpy.array ou pandas.series.
+ - doctype: tipo do documento, conforme lista acima.
  - lazy: boolean para definir se o documento deve ser extraído (parse) antes de validar ou não. É recomendado que esteja ligado caso precise validar um grande volume de documentos e estes já estejam padronizados e sem máscara.
 
 *Input:*
@@ -89,37 +90,27 @@ dbr.validate(docs, doctype='cnpj', lazy=False)
 array([False, False, False])
 ```
 
-### attributes
+### get_attribute
 
-Recebe um documento nos formatos int, str, list, numpy.array ou pandas.series. Estes objetos são então convertidos para um numpy.array de strings e o documento é então os atributos do documento são extraídos, se este tiver atributos para extração.
+Recebe n documentos nos formatos int, str, list, numpy.array ou pandas.series e um atributo. Estes objetos são então convertidos para um numpy.array de strings e o atributo é **extraído** se este existir no documento.
 
-Retorna um numpy.array de dicts com os atributos extraídos, se for selecionado apenas um atributo, retorna um numpy.array de strings.
+Retorna um numpy.array de str com os atributos extraídos.
 
 Argumentos:
- - doc: n documentos nos formatos int, str, list, numpy.array ou pandas.series
- - doctype: tipo do documento, conforme lista acima
- - attr: lista de atributos a serem extraídos, caso não seja especificado, todos os atributos são extraídos
+ - doclist: n documentos nos formatos int, str, list, numpy.array ou pandas.series.
+ - doctype: tipo do documento, conforme lista acima.
+ - attr: atributo a ser extraído.
+ - lazy: boolean para definir se o documento deve ser extraído (parse) antes de extrair o atributo ou não. É recomendado que esteja ligado caso precise extrair um grande volume de documentos e estes já estejam padronizados e sem máscara.
 
 
 *Input:*
 ```python
 import docbr as dbr
+from docbr import doctypes as d
+from docbr import attributes as attr
 
 docs = ['12345678000158', '12345678000298', '12345678000300']
-dbr.attributes(docs, doctype='cnpj')
-```
-
-*Output:*
-```text
-array([{'raiz':'12345678','matriz/filial':'matriz'}, {'raiz':'12345678','matriz/filial':'filial'}, {'raiz':'12345678','matriz/filial':'filial'}])
-```
-
-*Input:*
-```python
-import docbr as dbr
-
-docs = ['12345678000158', '12345678000298', '12345678000300']
-dbr.attributes(docs, doctype='cnpj', attr='raiz')
+dbr.attributes(docs, doctype=d.CNPJ, attr=attr.CNPJ_RAIZ, lazy=True)
 ```
 
 *Output:*
@@ -127,27 +118,22 @@ dbr.attributes(docs, doctype='cnpj', attr='raiz')
 array(['12345678', '12345678', '12345678'])
 ```
 
-Para você visualizar todos os atributos disponíveis de cada documento, use o método `list_attributes`.
-
-```python
-import docbr as dbr
-dbr.list_attributes()
-```
-
 ## Uso com Pandas
 
-Para utilizar o DocBR com o Pandas, basta passar passar uma séries (coluna) para o método desejado e declarar o tipo de documento.
+Para utilizar o DocBR com o Pandas, basta passar passar um objeto pandas.Series (coluna) para o método desejado e declarar o tipo de documento.
 
-O retorno poderá ser inserido diretamente ao dataframe como uma nova coluna se desejado.
+O retorno poderá ser inserido diretamente ao dataframe como uma nova coluna.
 
 *Input:*
 ```python
-import docbr as dbr
 import pandas as pd
+import docbr as dbr
+from docbr import doctypes as d
+from docbr import attributes as attr
 
 df = pd.DataFrame({'cnpj': ['12345678000158', '12345678000298', '12345678000300']})
-df['cnpj_valido'] = dbr.validate(df['cnpj'], doctype='cnpj')
-df['cnpj_raiz']   = dbr.attributes(df['cnpj'], doctype='cnpj', attr='raíz')
+df['cnpj_valido'] = dbr.validate(df['cnpj'], doctype=d.CNPJ)
+df['cnpj_raiz']   = dbr.attributes(df['cnpj'], doctype=d.CNPJ, attr=attr.CNPJ_RAIZ)
 df.head()
 ```
 

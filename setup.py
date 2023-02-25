@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as r:
 
 setuptools.setup(
     name="docbr",
-    version="0.1.2",
+    version="0.1.3",
     license="MIT License",
     author="Maurício Adriano Fontes",
     author_email="suporte@mfontes.dev",
