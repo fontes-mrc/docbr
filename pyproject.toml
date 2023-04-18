@@ -1,0 +1,28 @@
+[tool.ruff]
+ignore-init-module-imports = true
+ignore = ["E501", "E402", "F821", "F401"]
+
+[tool.isort]
+profile = "black"
+filter_files = true
+force_grid_wrap = 2
+
+[tool.black]
+line-length = 80
+target-version = ['py38']
+
+[tool.mypy]
+ignore_missing_imports = true
+disallow_untyped_defs = true
+disallow_untyped_calls = true
+disallow_incomplete_defs = true
+
+[tool.interrogate]
+ignore-init-method = true
+ignore-init-module = true
+ignore-private = true
+ignore-module = true
+ignore-nested-functions = true
+fail-under = 90
+exclude = ["*/test_*.py"]
+verbose = 2

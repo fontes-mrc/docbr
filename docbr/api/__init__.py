@@ -1,1 +1,5 @@
-from docbr.api.facade import parse, validate, get_attribute
+from docbr.api.facade import (
+    get_attribute,
+    parse,
+    validate,
+)
